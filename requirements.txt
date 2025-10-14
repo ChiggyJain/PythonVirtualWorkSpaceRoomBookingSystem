@@ -1,0 +1,20 @@
+
+# FastAPI core
+fastapi==0.115.2
+uvicorn==0.32.0
+
+# Database (MySQL8)
+mysql-connector-python==9.0.0
+
+# Environment management
+python-dotenv==1.0.1
+
+# Security & Authentication
+python-jose[cryptography]==3.3.0
+passlib==1.7.4
+bcrypt==4.0.1
+python-multipart==0.0.9
+
+# Data validation
+pydantic==2.9.2
+pydantic-settings==2.5.2
