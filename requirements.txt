@@ -3,8 +3,11 @@
 fastapi==0.115.2
 uvicorn==0.32.0
 
-# Database (MySQL8)
-mysql-connector-python==9.0.0
+# Database (MySQL8) sync driver
+#mysql-connector-python==9.0.0
+
+### Database (MySQL8) async driver
+aiomysql==0.2.0
 
 # Environment management
 python-dotenv==1.0.1

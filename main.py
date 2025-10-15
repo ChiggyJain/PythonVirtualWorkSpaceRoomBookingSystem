@@ -1,6 +1,7 @@
 
 from fastapi import FastAPI
 from api.v1.endpoints import router as v1_router
+from core.mysql_db import MysqlDB
 
 
 app = FastAPI(
@@ -12,14 +13,27 @@ app = FastAPI(
 app.include_router(v1_router, prefix="/api/v1")
 
 
+@app.on_event("startup")
+async def startup_event():
+    print(f"Application startup: connecting to MySQL database...")
+    await MysqlDB.connect()
+    print(f"Application startup: connected to MySQL database...")
+
+@app.on_event("shutdown")
+async def shutdown_event():
+    print(f"Application shutdown: disconnecting from MySQL database...")
+    await MysqlDB.disconnect()
+    print(f"Application shutdown: disconnected from MySQL database...")
+
+
 # root endpoint
-@app.get("/", summary="Backend System Entry Point")
-def root():
+@app.get("/system-health", summary="System Health")
+async def root():
 
     """
-        This is backend system entry point
+        This is api is used for checking backend system health
     """
 
     return {
-        "message": "Welcome to Virtual Workspace Room Booking System REST APIs"
+        "message": "System is up and running successfully"
     }
