@@ -20,8 +20,9 @@ async def login_user(loginUserRequestFormData: LoginRequest):
     """
         This api is used for authenticate user login details. 
         If login success then return access-token details with validity of 1000minutes only.
+        If login success then use given acces-token for accessing other APIs.
         If login failed then return error messages.
-        - **username**: Enter your account username 
+        - **username**: Enter your account username
         - **password**: Enter your account password
     """
 
@@ -62,7 +63,7 @@ async def login_user(loginUserRequestFormData: LoginRequest):
 async def rooms_available(teamListRequestFormData: TeamsListRequest = Depends()):
 
     """
-        This api is used for get team with members count details
+        This api is used for get team list with members count details.
         - **access_token**: Enter your account logged-in access token
     """
 
@@ -213,7 +214,7 @@ async def cancel_room_booking(cancelBookedRoomRequestFormData: CancelBookedRoomR
 async def room_booking(roomBookingRequestFormData: RoomBookingRequest):
 
     """
-        This api is used for creating room booking details
+        This api is used for creating room booking details based on team/individual-user.
         - **access_token**: Enter your account access token
         - **team_id**: If you are booking room for TEAM then please provide team_id ELSE 0
         - **room_id**: Enter room id
@@ -240,7 +241,6 @@ async def room_booking(roomBookingRequestFormData: RoomBookingRequest):
         if validatedRoomBookingSlotDateTimeRspObj["status_code"]!=200:
            return JSONResponse(status_code=validatedRoomBookingSlotDateTimeRspObj['status_code'], content=validatedRoomBookingSlotDateTimeRspObj) 
         
-        
 
         # decoding access-token         
         decodedAccessTokenRspObj = decodeLoginUserAccessToken(access_token) 
@@ -250,6 +250,14 @@ async def room_booking(roomBookingRequestFormData: RoomBookingRequest):
             rspDataObj['messages'] = ["Your account access token is expired. Please regenerate at your end via using /login api only"]
         if decodedAccessTokenRspObj['status_code']==200:
             userId = decodedAccessTokenRspObj['data']['token_data']["userId"]
+            # checking team members count details
+            if team_id>0:
+                teamRspObj = await getTeamsDetails(team_id)
+                if teamRspObj['status_code'] == 200:
+                    if teamRspObj['data']['teams'][0]['teamMembersCount']<3:
+                        rspDataObj['status_code'] = 404
+                        rspDataObj['messages'] = [f"Team-member-count is less than<3 in selected team-id. Not allowed to book conference room."]
+                        return JSONResponse(status_code=rspDataObj['status_code'], content=rspDataObj)
             # room booking details
             roomBookedRspObj = await createRoomBookingDetails(userId, team_id, room_id, room_booking_slot_datetime)
             print(f"roomBookedRspObj: {roomBookedRspObj}")

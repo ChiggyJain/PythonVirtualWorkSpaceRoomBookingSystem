@@ -2,10 +2,11 @@
 
 import uuid
 import aiomysql
+from typing import Optional
 from core.mysql_db import MysqlDB
 
 
-async def getTeamsDetails():
+async def getTeamsDetails(teamId: Optional[int] = None):
 
     """
         This function is used to get all teams with member count details
@@ -28,14 +29,21 @@ async def getTeamsDetails():
             JOIN TEAMS t ON t.id=tm.team_id
             JOIN USERS u ON u.id=tm.user_id
             WHERE 1
-            GROUP BY t.id
         """
+
+        params = []
+
+        # Conditionally add teamId filter
+        if teamId is not None and teamId>0:
+            sqlQry+= " AND t.id = %s"
+        
+        sqlQry+= " GROUP BY t.id"
         
         async with MysqlDB.pool.acquire() as conn:
             await conn.begin() 
             conn.autocommit(True)
             async with conn.cursor(aiomysql.DictCursor) as cur:
-                await cur.execute(sqlQry)
+                await cur.execute(sqlQry, params)
                 availableTeamMembersDetails = await cur.fetchall()
                 #print(f"DB-Extracted-Teams-Available-Details: {availableTeamMembersDetails}")
                 if availableTeamMembersDetails and len(availableTeamMembersDetails)>0:
