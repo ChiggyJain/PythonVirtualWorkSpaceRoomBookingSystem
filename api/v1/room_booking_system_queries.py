@@ -46,7 +46,7 @@ async def getTeamsDetails(teamId: Optional[int] = None):
             async with conn.cursor(aiomysql.DictCursor) as cur:
                 await cur.execute(sqlQry, params)
                 availableTeamMembersDetails = await cur.fetchall()
-                print(f"DB-Extracted-Teams-Available-Details: {availableTeamMembersDetails}")
+                #print(f"DB-Extracted-Teams-Available-Details: {availableTeamMembersDetails}")
                 if availableTeamMembersDetails and len(availableTeamMembersDetails)>0:
                     rspDataObj['status_code'] = 200
                     rspDataObj['messages'] = [f"Team with members details is found."]
@@ -55,7 +55,7 @@ async def getTeamsDetails(teamId: Optional[int] = None):
                     }
                 else:
                     rspDataObj['status_code'] = 200
-                    rspDataObj['messages'] = [f"No team are found."]
+                    rspDataObj['messages'] = [f"No team details are found."]
                 
     except Exception as e:
         print(f"Exception error occured: {e}")
@@ -114,7 +114,7 @@ async def getAvailableRoomsDetails(room_type:str, room_booking_slot_datetime: st
                 #print(f"room_type: {room_type}, room_booking_slot_datetime: {room_booking_slot_datetime}\n")
                 await cur.execute(sqlQry, (room_booking_slot_datetime, room_type))
                 availableRoomsDetails = await cur.fetchall()
-                #print(f"DB-Extracted-Rooms-Available-Details: {availableRoomsDetails}")
+                print(f"DB-Extracted-Rooms-Available-Details: {availableRoomsDetails}")
                 if availableRoomsDetails and len(availableRoomsDetails)>0:
                     rspDataObj['status_code'] = 200
                     rspDataObj['messages'] = [f"Rooms available for booking Room-Type: {room_type}, Date-Time: {room_booking_slot_datetime}."]
