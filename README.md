@@ -67,9 +67,9 @@
 
 ---
 ### **Step4 - Build and Run Docker Containers into this directory: PythonVirtualWorkSpaceRoomBookingSystem**
-- docker compose -f docker-compose_local_machine.yaml down -v
-- docker compose -f docker-compose_local_machine.yaml build --no-cache
-- docker compose -f docker-compose_local_machine.yaml up
+- docker compose -f docker-compose_production_machine.yaml down -v
+- docker compose -f docker-compose_production_machine.yaml build --no-cache
+- docker compose -f docker-compose_production_machine.yaml up
 ---
 
 ---
