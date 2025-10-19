@@ -53,22 +53,21 @@
 
 ---
 ### **Step 2 — Clone the Repository**
-mkdir PythonVirtualWorkSpaceRoomBookingSystem
-cd PythonVirtualWorkSpaceRoomBookingSystem
-git clone https://github.com/ChiggyJain/PythonVirtualWorkSpaceRoomBookingSystem.git
-cd PythonVirtualWorkSpaceRoomBookingSystem
+- mkdir PythonVirtualWorkSpaceRoomBookingSystem
+- cd PythonVirtualWorkSpaceRoomBookingSystem
+- git clone https://github.com/ChiggyJain/PythonVirtualWorkSpaceRoomBookingSystem.git
 ---
 
 ---
 ### **Step3 - Build and Run Docker Containers**
-docker compose -f docker-compose_local_machine.yaml down -v
-docker compose -f docker-compose_local_machine.yaml build --no-cache
-docker compose -f docker-compose_local_machine.yaml up
+- docker compose -f docker-compose_local_machine.yaml down -v
+- docker compose -f docker-compose_local_machine.yaml build --no-cache
+- docker compose -f docker-compose_local_machine.yaml up
 ---
 
 ---
 ### **Step4 - Access API Documentation**
-http://127.0.0.1:8001/docs
+- http://127.0.0.1:8001/docs
 ---
 
 
