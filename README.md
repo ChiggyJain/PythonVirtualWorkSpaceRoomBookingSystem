@@ -46,24 +46,30 @@
 ---
 
 
-
+---
 ### **Step 1 — Stop local MySQL service**
 sudo systemctl stop mysql
+---
 
+---
 ### **Step 2 — Clone the Repository**
 mkdir PythonVirtualWorkSpaceRoomBookingSystem
 cd PythonVirtualWorkSpaceRoomBookingSystem
 git clone https://github.com/ChiggyJain/PythonVirtualWorkSpaceRoomBookingSystem.git
 cd PythonVirtualWorkSpaceRoomBookingSystem
+---
 
+---
 ### **Step3 - Build and Run Docker Containers**
 docker compose -f docker-compose_local_machine.yaml down -v
 docker compose -f docker-compose_local_machine.yaml build --no-cache
 docker compose -f docker-compose_local_machine.yaml up
+---
 
+---
 ### **Step4 - Access API Documentation**
 http://127.0.0.1:8001/docs
-
+---
 
 
 
