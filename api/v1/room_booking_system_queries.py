@@ -35,9 +35,10 @@ async def getTeamsDetails(teamId: Optional[int] = None):
 
         # Conditionally add teamId filter
         if teamId is not None and teamId>0:
-            sqlQry+= " AND t.id = %s"
+            sqlQry+= " AND t.id = %s "
+            params.append(teamId)
         
-        sqlQry+= " GROUP BY t.id"
+        sqlQry+= " GROUP BY t.id "
         
         async with MysqlDB.pool.acquire() as conn:
             await conn.begin() 
@@ -45,7 +46,7 @@ async def getTeamsDetails(teamId: Optional[int] = None):
             async with conn.cursor(aiomysql.DictCursor) as cur:
                 await cur.execute(sqlQry, params)
                 availableTeamMembersDetails = await cur.fetchall()
-                #print(f"DB-Extracted-Teams-Available-Details: {availableTeamMembersDetails}")
+                print(f"DB-Extracted-Teams-Available-Details: {availableTeamMembersDetails}")
                 if availableTeamMembersDetails and len(availableTeamMembersDetails)>0:
                     rspDataObj['status_code'] = 200
                     rspDataObj['messages'] = [f"Team with members details is found."]
@@ -53,7 +54,7 @@ async def getTeamsDetails(teamId: Optional[int] = None):
                         "teams": availableTeamMembersDetails
                     }
                 else:
-                    rspDataObj['status_code'] = 404
+                    rspDataObj['status_code'] = 200
                     rspDataObj['messages'] = [f"No team are found."]
                 
     except Exception as e:
