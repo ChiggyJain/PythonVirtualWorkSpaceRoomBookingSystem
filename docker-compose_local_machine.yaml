@@ -3,8 +3,10 @@
 
 services:
   app:
-    build: .
-    container_name: virtual_workspace_room_booking_app
+    build:
+      context: .
+      dockerfile: Dockerfile_local_machine
+    container_name: virtual_workspace_app_prod
     restart: always
     ports:
       - "8000:8000"
