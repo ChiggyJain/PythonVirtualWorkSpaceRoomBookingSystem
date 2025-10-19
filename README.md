@@ -61,10 +61,8 @@
 ---
 
 ---
-### **Step3 - Create .env file into this PythonVirtualWorkSpaceRoomBookingSystem and copy data from this PythonVirtualWorkSpaceRoomBookingSystem/file: env_local_machine.txt**
-- docker compose -f docker-compose_local_machine.yaml down -v
-- docker compose -f docker-compose_local_machine.yaml build --no-cache
-- docker compose -f docker-compose_local_machine.yaml up
+### **Step3: Creating environment file**
+- Create .env file into this PythonVirtualWorkSpaceRoomBookingSystem and copy data from this PythonVirtualWorkSpaceRoomBookingSystem/file: env_local_machine.txt
 ---
 
 ---
