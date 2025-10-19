@@ -210,7 +210,7 @@ async def cancel_room_booking(cancelBookedRoomRequestFormData: CancelBookedRoomR
 
 
 # room-booking api
-@router.post("/bookings/", summary="Room booking")
+@router.post("/bookings/", summary="Room Booking")
 async def room_booking(roomBookingRequestFormData: RoomBookingRequest):
 
     """
@@ -265,6 +265,48 @@ async def room_booking(roomBookingRequestFormData: RoomBookingRequest):
             roomBookedRspObj = await createRoomBookingDetails(userId, team_id, room_id, room_booking_slot_datetime)
             print(f"roomBookedRspObj: {roomBookedRspObj}")
             rspDataObj = roomBookedRspObj
+
+    except Exception as e:
+        print(f"Exception error occured: {e}")
+        rspDataObj['status_code'] = 500
+        rspDataObj['messages'] = [f"Error occured: {str(e)}"]
+
+    return JSONResponse(status_code=rspDataObj['status_code'], content=rspDataObj)
+
+
+# room-booking api
+@router.get("/bookings/", summary="Room Booked/Cancelled List")
+async def room_booking_list(roomBookingRequestFormData: RoomBookingListRequest = Depends()):
+
+    """
+        This api is used for viewing room booked/cancelled list details.
+        - **access_token**: Enter your account access token
+    """
+
+    # standard response data object
+    rspDataObj = {
+        "status_code": 404,
+        "messages": [],
+        "data": {}
+    }
+
+    try:
+
+        # extracting request form data
+        access_token = roomBookingRequestFormData.access_token
+        
+        # decoding access-token         
+        decodedAccessTokenRspObj = decodeLoginUserAccessToken(access_token) 
+        print(f"decodedAccessTokenRspObj: {decodedAccessTokenRspObj}\n")
+        if decodedAccessTokenRspObj['status_code']!=200:
+            rspDataObj['status_code'] = 401
+            rspDataObj['messages'] = ["Your account access token is expired. Please regenerate at your end via using /login api only"]
+        if decodedAccessTokenRspObj['status_code']==200:
+            userId = decodedAccessTokenRspObj['data']['token_data']["userId"]
+            # room booking details
+            roomBookingListRspObj = await createRoomBookingDetails(userId)
+            print(f"roomBookingListRspObj: {roomBookingListRspObj}")
+            rspDataObj = roomBookingListRspObj
 
     except Exception as e:
         print(f"Exception error occured: {e}")

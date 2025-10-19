@@ -55,7 +55,7 @@ async def getTeamsDetails(teamId: Optional[int] = None):
                     }
                 else:
                     rspDataObj['status_code'] = 200
-                    rspDataObj['messages'] = [f"No team details are found."]
+                    rspDataObj['messages'] = [f"No team detare found."]
                 
     except Exception as e:
         print(f"Exception error occured: {e}")
@@ -255,3 +255,57 @@ async def createRoomBookingDetails(user_id: int, team_id: int, room_id: int, roo
         rspDataObj['messages'] = [f"Error occured: {str(e)}"]
    
     return rspDataObj
+
+
+
+async def getRoomBookingListDetails(user_id: int):
+
+    """
+        This function is used to get all room booked/cancelled based on user_id
+    """
+    
+    rspDataObj = {
+        "status_code": 400,
+        "messages": [],
+        "data": {}
+    }
+
+    try:
+
+        sqlQry = """
+            SELECT 
+            r.id AS roomId,
+            r.room_name AS roomName,
+            r.room_type AS roomType,
+            COALESCE(room_capacity, 0) AS roomSeatCapacity,
+            COALESCE(b.booked_count, 0) AS roomSeatBookedCount,
+            COALESCE((COALESCE(room_capacity, 0) - COALESCE(b.booked_count, 0)), 0) roomSeatBookingAvailableCount
+            FROM ROOMS r
+            JOIN BOOKINGS b ON b.room_id=r.id
+            WHERE 1
+            AND b.creater_id=%s
+        """
+        
+        async with MysqlDB.pool.acquire() as conn:
+            await conn.begin() 
+            await conn.autocommit(True)
+            async with conn.cursor(aiomysql.DictCursor) as cur:
+                await cur.execute(sqlQry, (user_id))
+                roomBookingListDetails = await cur.fetchall()
+                print(f"DB-Extracted-Rooms-Booking-List-Details: {roomBookingListDetails}")
+                if roomBookingListDetails and len(roomBookingListDetails)>0:
+                    rspDataObj['status_code'] = 200
+                    rspDataObj['messages'] = [f"Room booking details are available for User-ID: {user_id}"]
+                    rspDataObj['data'] = {
+                        "room_booking_list": roomBookingListDetails
+                    }
+                else:
+                    rspDataObj['status_code'] = 404
+                    rspDataObj['messages'] = [f"No room booking details available for User-ID: {user_id}."]
+                
+    except Exception as e:
+        print(f"Exception error occured: {e}")
+        rspDataObj['status_code'] = 500
+        rspDataObj['messages'] = [f"Error occured: {str(e)}"]
+    return rspDataObj
+

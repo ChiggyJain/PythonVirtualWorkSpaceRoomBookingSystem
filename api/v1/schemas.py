@@ -25,3 +25,7 @@ class RoomBookingRequest(BaseModel):
     team_id: int = Field(None, description="If you are booking room for TEAM then please provide team_id ELSE 0")
     room_id: int = Field(..., description="Enter room id")
     room_booking_slot_datetime: str = Field(..., description="Enter your desired booking slot datetime in 'YYYY-MM-DD HH:MM' format")
+
+
+class RoomBookingListRequest(BaseModel):
+    access_token: str = Field(..., description="Enter your logged-in account access token")
