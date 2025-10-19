@@ -50,7 +50,10 @@ REPLACE INTO `TEAMS`
 (`id`, `team_name`) 
 VALUES
 (1, 'Team Alpha'),
-(2, 'Team Beta');
+(2, 'Team Beta'),
+(3, 'Team Gamma'),
+(4, 'Team Delta'),
+(5, 'Team Zeta');
 COMMIT;
 
 
@@ -77,7 +80,13 @@ VALUES
 (7, 2, 7),
 (8, 2, 8),
 (9, 2, 9),
-(10, 2, 10);
+(10, 2, 10),
+(11, 3, 1),
+(12, 3, 2),
+(13, 4, 1),
+(14, 4, 2),
+(15, 4, 3),
+(16, 5, 4);
 COMMIT;
 
 
