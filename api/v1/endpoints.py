@@ -4,6 +4,7 @@ from fastapi import APIRouter, Form, HTTPException, Depends
 from datetime import datetime
 from datetime import time as dt_time  # rename to avoid clash
 from fastapi.responses import JSONResponse
+from fastapi.encoders import jsonable_encoder
 from api.v1.schemas import *
 from api.v1.login_queries import *
 from api.v1.room_booking_system_queries import *
@@ -84,7 +85,7 @@ async def teams_available(teamListRequestFormData: TeamsListRequest = Depends())
         print(f"decodedAccessTokenRspObj: {decodedAccessTokenRspObj}\n")
         if decodedAccessTokenRspObj['status_code']!=200:
             rspDataObj['status_code'] = 401
-            rspDataObj['messages'] = ["Your account access token is expired. Please regenerate at your end via using /login api only"]
+            rspDataObj['messages'] = ["Your account access token is expired OR invalid. Please regenerate at your end via using /login api only"]
         if decodedAccessTokenRspObj['status_code']==200:
             userId = decodedAccessTokenRspObj['data']['token_data']["userId"]
             # fetching available rooms details
@@ -142,7 +143,7 @@ async def rooms_available(roomAvailableRequestFormData: RoomsAvailableRequest = 
         print(f"decodedAccessTokenRspObj: {decodedAccessTokenRspObj}\n")
         if decodedAccessTokenRspObj['status_code']!=200:
             rspDataObj['status_code'] = 401
-            rspDataObj['messages'] = ["Your account access token is expired. Please regenerate at your end via using /login api only"]
+            rspDataObj['messages'] = ["Your account access token is expired OR invalid. Please regenerate at your end via using /login api only"]
         if decodedAccessTokenRspObj['status_code']==200:
             userId = decodedAccessTokenRspObj['data']['token_data']["userId"]
             # fetching available rooms details
@@ -187,7 +188,7 @@ async def cancel_room_booking(cancelBookedRoomRequestFormData: CancelBookedRoomR
         print(f"decodedAccessTokenRspObj: {decodedAccessTokenRspObj}\n")
         if decodedAccessTokenRspObj['status_code']!=200:
             rspDataObj['status_code'] = 401
-            rspDataObj['messages'] = ["Your account access token is expired. Please regenerate at your end via using /login api only"]
+            rspDataObj['messages'] = ["Your account access token is expired OR invalid. Please regenerate at your end via using /login api only"]
         if decodedAccessTokenRspObj['status_code']==200:
             userId = decodedAccessTokenRspObj['data']['token_data']["userId"]
             # cancelling booked room booking
@@ -247,7 +248,7 @@ async def room_booking(roomBookingRequestFormData: RoomBookingRequest):
         print(f"decodedAccessTokenRspObj: {decodedAccessTokenRspObj}\n")
         if decodedAccessTokenRspObj['status_code']!=200:
             rspDataObj['status_code'] = 401
-            rspDataObj['messages'] = ["Your account access token is expired. Please regenerate at your end via using /login api only"]
+            rspDataObj['messages'] = ["Your account access token is expired OR invalid. Please regenerate at your end via using /login api only"]
         if decodedAccessTokenRspObj['status_code']==200:
             userId = decodedAccessTokenRspObj['data']['token_data']["userId"]
             # checking team members count details
@@ -276,7 +277,7 @@ async def room_booking(roomBookingRequestFormData: RoomBookingRequest):
 
 # room-booking api
 @router.get("/bookings/", summary="Room Booked/Cancelled List")
-async def room_booking_list(roomBookingRequestFormData: RoomBookingListRequest = Depends()):
+async def room_booking_list(roomBookingListRequestFormData: RoomBookingListRequest = Depends()):
 
     """
         This api is used for viewing room booked/cancelled list details.
@@ -293,20 +294,20 @@ async def room_booking_list(roomBookingRequestFormData: RoomBookingListRequest =
     try:
 
         # extracting request form data
-        access_token = roomBookingRequestFormData.access_token
+        access_token = roomBookingListRequestFormData.access_token
         
         # decoding access-token         
         decodedAccessTokenRspObj = decodeLoginUserAccessToken(access_token) 
         print(f"decodedAccessTokenRspObj: {decodedAccessTokenRspObj}\n")
         if decodedAccessTokenRspObj['status_code']!=200:
             rspDataObj['status_code'] = 401
-            rspDataObj['messages'] = ["Your account access token is expired. Please regenerate at your end via using /login api only"]
+            rspDataObj['messages'] = ["Your account access token is expired OR invalid. Please regenerate at your end via using /login api only"]
         if decodedAccessTokenRspObj['status_code']==200:
             userId = decodedAccessTokenRspObj['data']['token_data']["userId"]
             # room booking details
-            roomBookingListRspObj = await createRoomBookingDetails(userId)
+            roomBookingListRspObj = await getRoomBookingListDetails(userId)
             print(f"roomBookingListRspObj: {roomBookingListRspObj}")
-            rspDataObj = roomBookingListRspObj
+            rspDataObj = jsonable_encoder(roomBookingListRspObj)
 
     except Exception as e:
         print(f"Exception error occured: {e}")

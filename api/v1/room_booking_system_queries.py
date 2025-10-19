@@ -277,11 +277,17 @@ async def getRoomBookingListDetails(user_id: int):
             r.id AS roomId,
             r.room_name AS roomName,
             r.room_type AS roomType,
-            COALESCE(room_capacity, 0) AS roomSeatCapacity,
-            COALESCE(b.booked_count, 0) AS roomSeatBookedCount,
-            COALESCE((COALESCE(room_capacity, 0) - COALESCE(b.booked_count, 0)), 0) roomSeatBookingAvailableCount
+            b.booked_id roomBookedId,
+            b.booked_reference_type roomBookedForReferenceType,
+            b.booked_reference_type_id roomBookedForReferenceTypeId,
+            b.booked_start_datetime_slot roomBookedDateTimeSlot,
+            b.creater_id roomBookedByUserId,
+            u.name roomBookedByUserFullName,
+            b.created_on roomBookedEntryCreatedOn,
+            b.status roomBookedStatus
             FROM ROOMS r
             JOIN BOOKINGS b ON b.room_id=r.id
+            JOIN USERS u ON u.id=b.creater_id
             WHERE 1
             AND b.creater_id=%s
         """
@@ -307,5 +313,6 @@ async def getRoomBookingListDetails(user_id: int):
         print(f"Exception error occured: {e}")
         rspDataObj['status_code'] = 500
         rspDataObj['messages'] = [f"Error occured: {str(e)}"]
+        
     return rspDataObj
 
