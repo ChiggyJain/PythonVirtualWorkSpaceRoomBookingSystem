@@ -30,7 +30,7 @@ async def startup_event():
             break
         except Exception as e:
             retries+= 1
-            print(f"⏳ Waiting for MySQL... attempt {retries}/{MAX_RETRIES}, error: {e}\n")
+            print(f"Waiting for MySQL... attempt {retries}/{MAX_RETRIES}, error: {e}\n")
             await asyncio.sleep(RETRY_INTERVAL)
     else:
         raise RuntimeError("Could not connect to MySQL after multiple attempts")
