@@ -21,7 +21,9 @@ services:
       - workspace_network
 
   app:
-    build: .
+    build:
+      context: .
+      dockerfile: Dockerfile_production_machine
     container_name: virtual_workspace_app_prod
     restart: always
     ports:
