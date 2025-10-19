@@ -45,13 +45,10 @@
 
 ---
 
-## 🚀 How to Run the Project on Local Machine
+
 
 ### **Step 1 — Stop local MySQL service**
-> Ensure MySQL on your host machine is stopped to avoid port conflict.
-```bash
 sudo systemctl stop mysql
-
 
 ### **Step 2 — Clone the Repository**
 mkdir PythonVirtualWorkSpaceRoomBookingSystem
