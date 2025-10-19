@@ -136,9 +136,9 @@ def validateRoomBookingDateTimeSlot(room_booking_slot_datetime: str):
                 rspDataObj['messages'] = ["Slot datetime cannot be in the past."]
                 return rspDataObj
             # Check if time is within allowed working hours
-            if not (dt_time(9, 0) <= slot_dt.time() <= dt_time(18, 0)):
+            if not (dt_time(9, 0) <= slot_dt.time() <= dt_time(17, 0)):
                 rspDataObj['status_code'] = 400
-                rspDataObj['messages'] = ["Slot time must be between 09:00 and 18:00."]
+                rspDataObj['messages'] = ["Slot time must be between 09:00 and 17:00."]
                 return rspDataObj
             # Check if minute is zero (hourly slot)
             if slot_dt.minute != 0 or slot_dt.second != 0:
