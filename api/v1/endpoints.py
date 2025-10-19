@@ -259,6 +259,7 @@ async def room_booking(roomBookingRequestFormData: RoomBookingRequest):
                         teamRspObj['messages'] = [f"Team-member-count is less than<3 in selected team-id. Not allowed to book conference room."]
                         return JSONResponse(status_code=teamRspObj['status_code'], content=teamRspObj)
                 else:
+                    teamRspObj['data'] = {}
                     return JSONResponse(status_code=teamRspObj['status_code'], content=teamRspObj)
             # room booking details
             roomBookedRspObj = await createRoomBookingDetails(userId, team_id, room_id, room_booking_slot_datetime)
