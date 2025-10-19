@@ -60,7 +60,7 @@ async def login_user(loginUserRequestFormData: LoginRequest):
 
 # team with members count details api
 @router.get("/teams/", summary="Team with members count details")
-async def rooms_available(teamListRequestFormData: TeamsListRequest = Depends()):
+async def teams_available(teamListRequestFormData: TeamsListRequest = Depends()):
 
     """
         This api is used for get team list with members count details.

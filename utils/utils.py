@@ -129,6 +129,7 @@ def validateRoomBookingDateTimeSlot(room_booking_slot_datetime: str):
         if room_booking_slot_datetime:
             # Parse string to datetime object
             slot_dt = datetime.strptime(room_booking_slot_datetime, "%Y-%m-%d %H:%M:%S")
+            print(f"Slot_dt: {slot_dt}, Current-Date-Time: {datetime.now()}\n")
             # Check if the slot is not in the past
             if slot_dt < datetime.now():
                 rspDataObj['status_code'] = 400

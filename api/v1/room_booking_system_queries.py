@@ -41,7 +41,7 @@ async def getTeamsDetails(teamId: Optional[int] = None):
         
         async with MysqlDB.pool.acquire() as conn:
             await conn.begin() 
-            conn.autocommit(True)
+            await conn.autocommit(True)
             async with conn.cursor(aiomysql.DictCursor) as cur:
                 await cur.execute(sqlQry, params)
                 availableTeamMembersDetails = await cur.fetchall()
@@ -108,7 +108,7 @@ async def getAvailableRoomsDetails(room_type:str, room_booking_slot_datetime: st
         
         async with MysqlDB.pool.acquire() as conn:
             await conn.begin() 
-            conn.autocommit(True)
+            await conn.autocommit(True)
             async with conn.cursor(aiomysql.DictCursor) as cur:
                 #print(f"room_type: {room_type}, room_booking_slot_datetime: {room_booking_slot_datetime}\n")
                 await cur.execute(sqlQry, (room_booking_slot_datetime, room_type))

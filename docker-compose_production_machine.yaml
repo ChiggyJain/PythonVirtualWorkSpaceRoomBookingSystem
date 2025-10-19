@@ -13,7 +13,7 @@ services:
       MYSQL_USER: ${MYSQL_DB_USER}
       MYSQL_PASSWORD: ${MYSQL_DB_PASSWORD}
     ports:
-      - "3306:3306"
+      - "${MYSQL_DB_PORT}:3306"
     volumes:
       - mysql_data:/var/lib/mysql
       - ./db/dump_data.sql:/docker-entrypoint-initdb.d/dump_data.sql
@@ -27,15 +27,17 @@ services:
     container_name: virtual_workspace_app_prod
     restart: always
     ports:
-      - "8000:8000"
+      - "8001:8001"
     env_file:
-      - .env
+      .env
+    environment:
+      - TZ=Asia/Kolkata   
     depends_on:
       - db
     volumes:
       - .:/app
     command: >
-      sh -c "uvicorn main:app --host 0.0.0.0 --port 8000"
+      sh -c "uvicorn main:app --host 0.0.0.0 --port 8001"
     networks:
       - workspace_network
 
