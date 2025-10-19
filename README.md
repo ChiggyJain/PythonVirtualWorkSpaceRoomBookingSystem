@@ -48,7 +48,7 @@
 
 ---
 ### **Step 1 — Stop local MySQL service**
-sudo systemctl stop mysql
+- sudo systemctl stop mysql
 ---
 
 ---
